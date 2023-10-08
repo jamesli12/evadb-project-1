@@ -1,5 +1,7 @@
 # EvaDB Project 1
 
+The directory of the project is in the `evadb-venv` folder.
+
 ## Setup
 After installing the prerequisite libraries using pipenv, run `run_evadb.py` to test out the program
 
