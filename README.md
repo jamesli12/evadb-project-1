@@ -1,1 +1,3 @@
-# evadb-project-1
+# EvaDB Project 1
+
+Layoff sentiment detector

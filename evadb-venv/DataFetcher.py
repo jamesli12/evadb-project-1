@@ -7,10 +7,10 @@ class DataFetcher:
     def get_data(self, company, news_type):
         data = []
 
-        uri = f"https://google.com/search?q={company}%20Company%20{news_type}%20News"
+        uri = f"https://www.bing.com/search?q={company}%20Company%20{news_type}%20News"
         res = requests.get(uri)
         soup = BeautifulSoup(res.text, "html.parser") 
-        heading_object = soup.find_all('h3') 
+        heading_object = soup.find_all('h2') 
         for info in heading_object: 
             formatted_str = re.sub(r'\W+', ' ', info.getText()).strip()
             data.append(bytes(formatted_str, 'utf-8').decode('utf-8', 'ignore'))
