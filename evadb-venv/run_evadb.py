@@ -29,6 +29,10 @@ class LayoffPredictor:
             for d in fetcher.get_data(COMPANY_NAME, str(data_type)):
                 data.append(d)
 
+        if (len(data) == 0):
+            print("There was an error fetching data, please try again (time out).")
+            return
+
         with open('./headers.csv', 'w', newline='') as file:
             fieldname = ['header']
             writer = csv.DictWriter(file, fieldnames=fieldname)
