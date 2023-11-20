@@ -12,4 +12,5 @@ The program will ask you for an OpenAI key, after which, it will ask you for the
 The program uses Google to scrape, so you may get timed out occasionally.
 
 ## Sample Flow
-![image](https://github.com/jamesli12/layoff_prediction_app/assets/19893822/e05e8d7d-42b1-462f-ad49-f247412837fe)
+![image](https://github.com/jamesli12/layoff_prediction_app/assets/19893822/299f91ca-7ae3-4ed7-9438-f00b4303214f)
+
