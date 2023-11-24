@@ -14,22 +14,31 @@ class LayoffPredictor:
         openai.api_key = os.getenv("OPENAI_API_KEY")
         COMPANY_NAME = input("Enter the name of the company you would like to analyze: ")
 
+        cursor = evadb.connect().cursor()
+        cursor.drop_table("Data", if_exists=True).execute()
+        cursor.query(
+            """CREATE TABLE IF NOT EXISTS Data (search_prompts TEXT(100));"""
+        ).execute()
+
         #grab this from input
-        data_types = []
         curr_type = ""
         while True:
             curr_type = input(f"Enter a search prompt (eg. {COMPANY_NAME} layoffs, {COMPANY_NAME} financials and funding, etc.), type 'end' to stop: ")
             if curr_type == "end" or len(curr_type) == 0:
                 break
-            data_types.append(curr_type)
+            cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{(curr_type)}')").execute()
 
-        if len(data_types) == 0:
-            data_types = [f"{COMPANY_NAME} layoffs", f"{COMPANY_NAME} financials and funding", f"{COMPANY_NAME} hiring"]
+        prompt_dt = cursor.table("Data").select("search_prompts").df()
+        if len(prompt_dt) == 0:
+            cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} layoffs')").execute()
+            cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} financials and funding')").execute()
+            cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} hiring')").execute()
+            prompt_dt = cursor.table("Data").select("search_prompts").df()
 
         fetcher = DataFetcher()
         data = []
-        for data_type in data_types:
-            for d in fetcher.get_data(COMPANY_NAME, str(data_type)):
+        for index, row in prompt_dt.iterrows():
+            for d in fetcher.get_data(COMPANY_NAME, str(row['search_prompts'])):
                 data.append(d)
 
         if (len(data) == 0):
@@ -43,7 +52,6 @@ class LayoffPredictor:
             for d in data:
                 writer.writerow({ 'header': d })
 
-        cursor = evadb.connect().cursor()
         cursor.drop_table("Headers", if_exists=True).execute()
         cursor.query(
             """CREATE TABLE IF NOT EXISTS Headers (header TEXT(100));"""
