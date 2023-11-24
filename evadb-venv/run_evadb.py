@@ -9,8 +9,9 @@ from collections import defaultdict
 class LayoffPredictor:
 
     def __init__(self):
-
-        os.environ["OPENAI_API_KEY"] = input("Enter your OpenAI API key: ")
+        os.environ["OPENAI_API_KEY"] = ""
+        while len(os.environ["OPENAI_API_KEY"]) == 0:
+            os.environ["OPENAI_API_KEY"] = input("Enter your OpenAI API key: ")
         openai.api_key = os.getenv("OPENAI_API_KEY")
         COMPANY_NAME = input("Enter the name of the company you would like to analyze: ")
 
