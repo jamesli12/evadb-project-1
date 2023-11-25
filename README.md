@@ -10,7 +10,7 @@ The program will ask you for an OpenAI key, after which, it will ask you for the
 
 ## Notes
 The program uses Google to scrape, so you may get timed out occasionally.
-The program now uses DataFetcher as an integrated EvaDB function, and the `CREATE FUNCTION IF NOT EXISTS DataFetcher IMPL './evadb-venv/DataFetcher.py` line in `run_evadb.py` references the `DataFetcher.py` file. Since I run the program in the root directory, there isn't a problem, but if you're running the project from a different directory, you may have to change this line for it to reference the function properly.
+The program now uses DataFetcher as an integrated EvaDB function, and the `CREATE FUNCTION IF NOT EXISTS DataFetcher IMPL './evadb-venv/DataFetcher.py` line in `run_evadb.py` references the `DataFetcher.py` file. Since I run the program in the root directory, there isn't a problem. However, if you're running the project from a different directory, you may have to change this line for it to reference the function properly.
 
 ## Sample Flow
 ![image](https://github.com/jamesli12/layoff_prediction_app/assets/19893822/299f91ca-7ae3-4ed7-9438-f00b4303214f)
