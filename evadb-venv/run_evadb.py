@@ -16,6 +16,8 @@ class LayoffPredictor:
         COMPANY_NAME = input("Enter the name of the company you would like to analyze: ")
 
         cursor = evadb.connect().cursor()
+        cursor.query("CREATE FUNCTION IF NOT EXISTS DataFetcher IMPL './evadb-venv/DataFetcher.py'").execute()
+
         cursor.drop_table("Data", if_exists=True).execute()
         cursor.query(
             """CREATE TABLE IF NOT EXISTS Data (search_prompts TEXT(100));"""
@@ -34,13 +36,14 @@ class LayoffPredictor:
             cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} layoffs')").execute()
             cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} financials and funding')").execute()
             cursor.query(f"INSERT INTO Data (search_prompts) VALUES ('{COMPANY_NAME} hiring')").execute()
-            prompt_dt = cursor.table("Data").select("search_prompts").df()
 
-        fetcher = DataFetcher()
+        test_dt = cursor.table("Data").select(f"DataFetcher('{COMPANY_NAME}', search_prompts)").df()
+
         data = []
-        for index, row in prompt_dt.iterrows():
-            for d in fetcher.get_data(COMPANY_NAME, str(row['search_prompts'])):
-                data.append(d)
+        for index, row in test_dt.iterrows():
+            news_array = row.iloc[0]
+            for headline in news_array:
+                data.append(headline)
 
         if (len(data) == 0):
             print("There was an error fetching data, please try again (time out).")
